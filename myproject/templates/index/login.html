@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entrar</title>
+    <style>
+      :root {
+        --bg: #f7f8fa;
+        --card: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --primary: #2563eb;
+        --primary-600: #1d4ed8;
+        --border: #e5e7eb;
+        --shadow: 0 4px 14px rgba(0,0,0,.08);
+      }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        min-height: 100vh;
+      }
+      .topbar { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1px solid var(--border); }
+      .topwrap { max-width: 1024px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; }
+      .brand { font-weight: 800; letter-spacing: .2px; color: var(--text); text-decoration: none; }
+      .card {
+        width: 100%;
+        max-width: 420px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 28px;
+        margin: 24px auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin: 0 0 6px;
+      }
+      p.lead { margin: 0 0 18px; color: var(--muted); }
+      .field { margin-bottom: 14px; }
+      label { display: block; margin-bottom: 6px; font-weight: 600; }
+      input[type="email"], input[type="password"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        outline: none;
+        transition: border-color .2s ease;
+        background: #fff;
+      }
+      input:focus { border-color: var(--primary); }
+      .actions { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+      .btn {
+        appearance: none;
+        border: none;
+        background: var(--primary);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background .2s ease;
+      }
+      .btn:hover { background: var(--primary-600); }
+      .muted-link { color: var(--muted); text-decoration: none; }
+      .muted-link:hover { text-decoration: underline; }
+      .footer { margin-top: 16px; text-align: center; color: var(--muted); }
+      .error { color: #b91c1c; margin: 6px 0 0; font-size: .9rem; }
+      .alert { color: #b91c1c; background: #fee2e2; border: 1px solid #fecaca; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; }
+
+      /* Responsividade */
+      @media (max-width: 640px) {
+        .card { padding: 20px; margin: 16px; }
+        h1 { font-size: 1.3rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topwrap">
+        <a class="brand" href="/">MyProject</a>
+      </div>
+    </header>
+    <main class="card">
+      <header>
+        <h1>Entrar</h1>
+        <p class="lead">Acesse sua conta para continuar</p>
+      </header>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% if form and form.non_field_errors %}
+          <div class="alert">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="voce@exemplo.com" value="{{ form.email.value|default_if_none:'' }}" required />
+          {% if form and form.email.errors %}
+            <div class="error">{{ form.email.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="field">
+          <label for="password">Senha</label>
+          <input id="password" name="password" type="password" placeholder="••••••••" required />
+          {% if form and form.password.errors %}
+            <div class="error">{{ form.password.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="actions">
+          <a class="muted-link" href="/login/register/">Criar conta</a>
+          <button class="btn" type="submit">Entrar</button>
+        </div>
+      </form>
+
+      <div class="footer">
+        <small>Esqueceu a senha? <a class="muted-link" href="#">Recuperar acesso</a></small>
+      </div>
+    </main>
+  </body>
+ </html>

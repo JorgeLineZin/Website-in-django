@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Início</title>
+    <style>
+      :root {
+        --bg: #f7f8fa;
+        --text: #111827;
+        --muted: #6b7280;
+        --primary: #2563eb;
+        --primary-600: #1d4ed8;
+        --border: #e5e7eb;
+        --card: #ffffff;
+        --shadow: 0 4px 14px rgba(0,0,0,.08);
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+      }
+      .navbar {
+        position: sticky; top: 0; z-index: 10;
+        background: #fff; border-bottom: 1px solid var(--border);
+      }
+      .nav-wrap { max-width: 1024px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 16px; }
+      .brand { font-weight: 800; letter-spacing: .2px; }
+      .nav { display: flex; gap: 10px; margin-left: 8px; flex-wrap: wrap; }
+      .nav a { color: var(--text); text-decoration: none; padding: 8px 10px; border-radius: 8px; }
+      .nav a:hover { background: #f3f4f6; }
+      .spacer { flex: 1; }
+      .auth { display: flex; align-items: center; gap: 8px; font-size: .95rem; }
+      .auth a { color: #fff; background: var(--primary); text-decoration: none; padding: 8px 12px; border-radius: 8px; }
+      .auth a:hover { background: var(--primary-600); }
+      .auth form { margin: 0; }
+      .btn-out { color: #fff; background: #ef4444; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+      .btn-out:hover { background: #dc2626; }
+      .status { color: var(--muted); }
+
+      .container { max-width: 1024px; margin: 24px auto; padding: 0 16px; }
+      .hero { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); padding: 28px; }
+      h1 { margin: 0 0 8px; font-size: 1.8rem; }
+      p { margin: 0 0 8px; }
+      .links { margin-top: 12px; }
+      .links a { color: var(--primary); text-decoration: none; }
+      .links a:hover { text-decoration: underline; }
+
+      /* Responsividade */
+      @media (max-width: 640px) {
+        .nav-wrap { flex-wrap: wrap; gap: 6px 10px; }
+        .nav { order: 3; width: 100%; margin-left: 0; }
+        .auth { order: 2; margin-left: auto; }
+        .brand { order: 1; }
+        .hero { padding: 18px; }
+        h1 { font-size: 1.5rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="nav-wrap">
+        <div class="brand">MyProject</div>
+        <nav class="nav" aria-label="Navegação principal">
+          <a href="/">Início</a>
+          <!-- Espaços para futuras abas -->
+          <a href="#" aria-disabled="true">Produtos</a>
+          <a href="#" aria-disabled="true">Sobre</a>
+          <a href="#" aria-disabled="true">Contato</a>
+        </nav>
+        <div class="spacer"></div>
+        <div class="auth">
+          {% if request.user.is_authenticated %}
+            <span class="status">Logado como <strong>{{ request.user.get_full_name|default:request.user.username }}</strong></span>
+            <form method="post" action="/login/logout/">
+              {% csrf_token %}
+              <button type="submit" class="btn-out" aria-label="Sair da conta">Sair</button>
+            </form>
+          {% else %}
+            <a href="/login/">Entrar</a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <h1>Bem-vindo</h1>
+        {% if request.user.is_authenticated %}
+          <p>Você está autenticado como <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>.</p>
+          <p class="links"><a href="/">Ir para a página inicial</a></p>
+        {% else %}
+          <p>Você não está autenticado.</p>
+          <p class="links"><a href="/login/">Ir para a página de login</a> · <a href="/login/register/">Criar conta</a></p>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+ </html>
